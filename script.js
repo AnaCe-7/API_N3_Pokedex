@@ -16,3 +16,18 @@ const colors = {
 	fighting: '#E6E0D4',
 	normal: '#F5F5F5'
 }
+
+// const API_URL = "https://pokeapi.co/api/v2/pokemon/?offset=150&limit=150";
+
+const API_URL = "https://pokeapi.co/api/v2/pokemon-form/";
+
+for (let i = 1; i <= 150; i++) {
+    fetch(API_URL + i)
+        .then((response) => response.json())
+        .then(data =>console.log(data))
+}
+
+function showPokemonCard(data) {
+
+}
+
