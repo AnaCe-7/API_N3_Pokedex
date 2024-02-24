@@ -1,5 +1,5 @@
-const poke_container = document.getElementById('poke-container')
-const pokemon_count = 150
+const poke_container = document.getElementById('poke-container');
+const pokemon_count = 150;
 const colors = {
     fire: '#FDDFDF',
     grass: '#DEFDE0',
@@ -15,29 +15,34 @@ const colors = {
     flying: '#F5F5F5',
     fighting: '#E6E0D4',
     normal: '#F5F5F5'
-}
+};
 
-const API_URL = "https://pokeapi.co/api/v2/pokemon/";
 
-for (let i = 1; i <= 150; i++) {
-    fetch(API_URL + i)
-        .then((response) => response.json())
-        .then((data) => showPokeCard(data));
-}
+const APIurl = 'https://pokeapi.co/api/v2/pokemon/';
 
-function showPokeCard(pokemon) {
-    const pokeCard = document.createElement("div");
-    pokeCard.classList.add("pokemon");
-    pokeCard.innerHTML =
-        `<div class="img-container">
-            <img src="${pokemon.sprites.other["official-artwork"].front_default}" alt="${pokemon.name}">
-        </div>
-        <div class="info">
-          <span class="number">${pokemon.held_items}</span>
-          <h3 class="name">${pokemon.name}</h3>
-          <small class="type">Type: <span>${pokemon.types[0].slot[1].type.name}</span></small>
-        </div>`;
-    
-    poke_container.append(pokeCard);
-}
+const getPokemon = async () => {
+    try {
+        for (let i = 1; i <= pokemon_count; i++) {
+            const response = await fetch(`${APIurl}${i}`);
+            
+            const data = await response.json();
+            
+            const pokeId = String(i).padStart(3, '0');
+            poke_container.innerHTML +=
+            `<div class="pokemon" style="background-color: ${colors[data.types[0].type.name]}">
+                    <div class="img-container">
+                        <img src="${data.sprites.other['official-artwork'].front_default}" alt="${data.name}">
+                    </div>
+                    <div class="info">
+                        <span class="number" id="number">#${pokeId}</span>
+                        <h3 class="name" id="name">${data.name.charAt(0).toUpperCase() + data.name.slice(1)}</h3>
+                        <small class="type" id="type">Type: <span>${data.types[0].type.name}</span></small>
+                    </div>
+                </div>`;
+        }
+    } catch (error) {
+        console.error(`Error obtaining Pokémon data`, error);
+    }
+};
 
+getPokemon();
